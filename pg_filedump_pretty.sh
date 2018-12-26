@@ -246,7 +246,6 @@ recover_action() {
             |awk '{print $4}' \
             |xargs)
 
-            # 23 1114 25
             #echo "DEBUG: coloidList: $coloidList"
 
             coltypeList=""
@@ -264,8 +263,6 @@ recover_action() {
                 #echo "DEBUG: coltype: $coltype"
                 coltypeList="$coltypeList $coltype"
             done
-
-            # int4 timestamp text
 
             if [[ $failed == 1 ]]; then
                 echo "ERROR: can't process table $tableName, skip it"
@@ -285,14 +282,12 @@ recover_action() {
             #echo "DEBUG: coltypeList2: $coltypeList2"
 
             # dump data
-            set -o xtrace
+            #set -o xtrace
             ${PG_FILEDUMP} -o -t -D $coltypeList2 ${PF_PRETTY_PGDATA}/base/$dboid/$tableOid \
             |grep -E '^COPY:' \
             |sed -e 's/^COPY: //g' \
             > ${PF_PRETTY_OUTPUT_DIRECTORY}/recovered-$dboid-$tableName.csv
-            set +o xtrace
-
-            echo "LOG: finish to process table $tableName"
+            #set +o xtrace
         done
     done
 
@@ -302,10 +297,10 @@ recover_action() {
 main() {
     case "$PF_PRETTY_ACTION" in
         "LIST")
-        list_action
+            list_action
         ;;
         "RECOVER")
-        recover_action
+            recover_action
         ;;
         *)
             echo "$package: error: unknown action is specified"
